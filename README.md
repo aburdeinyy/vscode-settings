@@ -23,30 +23,6 @@ curl -sSL https://raw.githubusercontent.com/aburdeinyy/vscode-settings/main/vsco
 Invoke-Expression (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/aburdeinyy/vscode-settings/main/vscode-setup.ps1").Content
 ```
 
-## 🛠️ Установка
-
-### Автоматическая установка
-
-#### Linux/macOS
-
-```bash
-# Скачать и запустить скрипт
-curl -sSL https://raw.githubusercontent.com/aburdeinyy/vscode-settings/main/vscode-setup.sh | bash
-
-# Или с указанием URL
-curl -sSL https://raw.githubusercontent.com/aburdeinyy/vscode-settings/main/vscode-setup.sh | bash -s "https://raw.githubusercontent.com/aburdeinyy/vscode-settings/main"
-```
-
-#### Windows (PowerShell)
-
-```powershell
-# Скачать и запустить скрипт
-Invoke-Expression (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/aburdeinyy/vscode-settings/main/vscode-setup.ps1").Content
-
-# Или с указанием URL
-Invoke-Expression (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/aburdeinyy/vscode-settings/main/vscode-setup.ps1").Content -GitHubUrl "https://raw.githubusercontent.com/aburdeinyy/vscode-settings/main"
-```
-
 ### Ручная установка
 
 1. Создайте папку `.vscode` в корне вашего проекта
@@ -79,32 +55,6 @@ Invoke-Expression (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/abu
 
 - **Launch Chrome**: Запуск Chrome с отладкой для Angular приложения (порт 4200)
 - **Attach to Chrome**: Подключение к уже запущенному Chrome (порт 9222)
-
-## 🔧 Интеграция в существующий проект
-
-### Для Angular проектов
-
-```bash
-# В корне Angular проекта
-curl -sSL https://raw.githubusercontent.com/aburdeinyy/vscode-settings/main/vscode-setup.sh | bash
-```
-
-### Для React/TypeScript проектов
-
-```bash
-# В корне проекта
-curl -sSL https://raw.githubusercontent.com/aburdeinyy/vscode-settings/main/vscode-setup.sh | bash
-```
-
-## 📋 Требования
-
-- VS Code версии 1.60.0 или выше
-- Node.js для работы с ESLint и Prettier
-- Chrome для отладки (опционально)
-
-## 📄 Лицензия
-
-Проект распространяется под лицензией MIT. См. файл `LICENSE` для деталей.
 
 ## 🆘 Поддержка
 
