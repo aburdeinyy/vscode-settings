@@ -115,11 +115,9 @@ EOF
 fi
 
 # Download launch.json
-if download_file "$GITHUB_URL/launch.json" ".vscode/launch.json" "launch.json"; then
-    echo "Downloaded launch.json"
-else
-    echo "Failed to download launch.json, creating default..."
-    cat > .vscode/launch.json << 'EOF'
+echo "Creating launch.json with correct VS Code variables..."
+
+cat > .vscode/launch.json << 'EOF'
 {
 	"version": "0.2.0",
 	"configurations": [
@@ -149,8 +147,7 @@ else
 	]
 }
 EOF
-    echo "Created default launch.json"
-fi
+echo "Created launch.json with correct VS Code variables"
 
 # Add .vscode to .gitignore if it doesn't exist
 if [ -f ".gitignore" ]; then

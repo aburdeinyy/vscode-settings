@@ -130,12 +130,11 @@ if (Download-File -Url $extensionsUrl -OutputPath $extensionsPath -FileName "ext
 $launchUrl = "$GitHubUrl/launch.json"
 $launchPath = ".vscode\launch.json"
 
-if (Download-File -Url $launchUrl -OutputPath $launchPath -FileName "launch.json") {
-    Write-Host "Downloaded launch.json" -ForegroundColor Green
-} else {
-    Write-Host "Failed to download launch.json, creating default..." -ForegroundColor Yellow
-    $defaultLaunch = @"
-{
+# Always create local copy with correct settings
+Write-Host "Creating launch.json with correct VS Code variables..." -ForegroundColor Yellow
+
+# Create JSON string directly with proper escaping
+$defaultLaunch = '{
 	"version": "0.2.0",
 	"configurations": [
 		{
@@ -143,14 +142,14 @@ if (Download-File -Url $launchUrl -OutputPath $launchPath -FileName "launch.json
 			"type": "chrome",
 			"request": "launch",
 			"url": "http://localhost:4200",
-			"webRoot": "\${workspaceFolder}",
+			"webRoot": "${workspaceFolder}",
 			"sourceMaps": true,
 			"sourceMapPathOverrides": {
-				"webpack:/*": "\${webRoot}/*",
-				"/./*": "\${webRoot}/*",
-				"/src/*": "\${webRoot}/src/*",
+				"webpack:/*": "${webRoot}/*",
+				"/./*": "${webRoot}/*",
+				"/src/*": "${webRoot}/src/*",
 				"/*": "*",
-				"/./~/*": "\${webRoot}/node_modules/*"
+				"/./~/*": "${webRoot}/node_modules/*"
 			}
 		},
 		{
@@ -158,15 +157,14 @@ if (Download-File -Url $launchUrl -OutputPath $launchPath -FileName "launch.json
 			"type": "chrome",
 			"request": "attach",
 			"port": 9222,
-			"webRoot": "\${workspaceFolder}",
+			"webRoot": "${workspaceFolder}",
 			"sourceMaps": true
 		}
 	]
-}
-"@
-    $defaultLaunch | Out-File -FilePath $launchPath -Encoding UTF8
-    Write-Host "Created default launch.json" -ForegroundColor Green
-}
+}'
+
+$defaultLaunch | Out-File -FilePath $launchPath -Encoding UTF8
+Write-Host "Created launch.json with correct VS Code variables" -ForegroundColor Green
 
 # Add .vscode to .gitignore if it doesn't exist
 if (Test-Path ".gitignore") {

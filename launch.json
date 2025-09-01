@@ -6,14 +6,14 @@
 			"type": "chrome",
 			"request": "launch",
 			"url": "http://localhost:4200",
-			"webRoot": "\",
+			"webRoot": "${workspaceFolder}",
 			"sourceMaps": true,
 			"sourceMapPathOverrides": {
-				"webpack:/*": "\/*",
-				"/./*": "\/*",
-				"/src/*": "\/src/*",
+				"webpack:/*": "${webRoot}/*",
+				"/./*": "${webRoot}/*",
+				"/src/*": "${webRoot}/src/*",
 				"/*": "*",
-				"/./~/*": "\/node_modules/*"
+				"/./~/*": "${webRoot}/node_modules/*"
 			}
 		},
 		{
@@ -21,7 +21,7 @@
 			"type": "chrome",
 			"request": "attach",
 			"port": 9222,
-			"webRoot": "\",
+			"webRoot": "${workspaceFolder}",
 			"sourceMaps": true
 		}
 	]
