@@ -1,11 +1,12 @@
-# VS Code Setup Script - Download from GitLab
+# VS Code Setup Script - Download from GitHub
 # Run this script in any repository to get VS Code settings
 
 param(
-    [string]$GitLabUrl = "https://gitlab.com/your-username/vscode-scripts/-/raw/main"
+    [string]$GitHubUrl = "https://raw.githubusercontent.com/aburdeinyy/vscode-settings/main"
 )
 
-Write-Host "Downloading VS Code setup from GitLab..." -ForegroundColor Green
+Write-Host "Downloading VS Code setup from GitHub..." -ForegroundColor Green
+Write-Host "GitHub URL: $GitHubUrl" -ForegroundColor Cyan
 
 # Create .vscode folder
 if (!(Test-Path ".vscode")) {
@@ -13,12 +14,32 @@ if (!(Test-Path ".vscode")) {
     Write-Host "Created .vscode folder" -ForegroundColor Green
 }
 
+# Function to download file with better error handling
+function Download-File {
+    param(
+        [string]$Url,
+        [string]$OutputPath,
+        [string]$FileName
+    )
+    
+    try {
+        Write-Host "Downloading $FileName..." -ForegroundColor Yellow
+        $response = Invoke-WebRequest -Uri $Url -OutFile $OutputPath -ErrorAction Stop
+        Write-Host "Successfully downloaded $FileName" -ForegroundColor Green
+        return $true
+    } catch {
+        Write-Host "Error downloading $FileName`: $($_.Exception.Message)" -ForegroundColor Red
+        return $false
+    }
+}
+
 # Download settings.json
-try {
-    $settingsUrl = "$GitLabUrl/settings.json"
-    Invoke-WebRequest -Uri $settingsUrl -OutFile ".vscode\settings.json"
+$settingsUrl = "$GitHubUrl/settings.json"
+$settingsPath = ".vscode\settings.json"
+
+if (Download-File -Url $settingsUrl -OutputPath $settingsPath -FileName "settings.json") {
     Write-Host "Downloaded settings.json" -ForegroundColor Green
-} catch {
+} else {
     Write-Host "Failed to download settings.json, creating default..." -ForegroundColor Yellow
     # Fallback to default settings
     $defaultSettings = @"
@@ -74,15 +95,17 @@ try {
 	"emmet.triggerExpansionOnTab": true
 }
 "@
-    $defaultSettings | Out-File -FilePath ".vscode\settings.json" -Encoding UTF8
+    $defaultSettings | Out-File -FilePath $settingsPath -Encoding UTF8
+    Write-Host "Created default settings.json" -ForegroundColor Green
 }
 
 # Download extensions.json
-try {
-    $extensionsUrl = "$GitLabUrl/extensions.json"
-    Invoke-WebRequest -Uri $extensionsUrl -OutFile ".vscode\extensions.json"
+$extensionsUrl = "$GitHubUrl/extensions.json"
+$extensionsPath = ".vscode\extensions.json"
+
+if (Download-File -Url $extensionsUrl -OutputPath $extensionsPath -FileName "extensions.json") {
     Write-Host "Downloaded extensions.json" -ForegroundColor Green
-} catch {
+} else {
     Write-Host "Failed to download extensions.json, creating default..." -ForegroundColor Yellow
     $defaultExtensions = @"
 {
@@ -99,15 +122,17 @@ try {
 	]
 }
 "@
-    $defaultExtensions | Out-File -FilePath ".vscode\extensions.json" -Encoding UTF8
+    $defaultExtensions | Out-File -FilePath $extensionsPath -Encoding UTF8
+    Write-Host "Created default extensions.json" -ForegroundColor Green
 }
 
 # Download launch.json
-try {
-    $launchUrl = "$GitLabUrl/launch.json"
-    Invoke-WebRequest -Uri $launchUrl -OutFile ".vscode\launch.json"
+$launchUrl = "$GitHubUrl/launch.json"
+$launchPath = ".vscode\launch.json"
+
+if (Download-File -Url $launchUrl -OutputPath $launchPath -FileName "launch.json") {
     Write-Host "Downloaded launch.json" -ForegroundColor Green
-} catch {
+} else {
     Write-Host "Failed to download launch.json, creating default..." -ForegroundColor Yellow
     $defaultLaunch = @"
 {
@@ -139,7 +164,8 @@ try {
 	]
 }
 "@
-    $defaultLaunch | Out-File -FilePath ".vscode\launch.json" -Encoding UTF8
+    $defaultLaunch | Out-File -FilePath $launchPath -Encoding UTF8
+    Write-Host "Created default launch.json" -ForegroundColor Green
 }
 
 # Add .vscode to .gitignore if it doesn't exist
@@ -164,5 +190,3 @@ Write-Host "   - Import sorting" -ForegroundColor White
 Write-Host "   - Recommended extensions" -ForegroundColor White
 Write-Host "   - Debug configuration" -ForegroundColor White
 Write-Host ""
-Write-Host "Usage: .\get-vscode-setup.ps1 [GitLabUrl]" -ForegroundColor Cyan
-Write-Host "Example: .\get-vscode-setup.ps1 https://gitlab.com/username/vscode-scripts/-/raw/main" -ForegroundColor Cyan

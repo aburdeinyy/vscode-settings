@@ -1,11 +1,28 @@
 #!/bin/bash
 
-# VS Code Setup Script - Download from GitLab
+# VS Code Setup Script - Download from GitHub
 # Run this script in any repository to get VS Code settings
 
-GITLAB_URL=${1:-"https://gitlab.com/your-username/vscode-scripts/-/raw/main"}
+GITHUB_URL=${1:-"https://raw.githubusercontent.com/aburdeinyy/vscode-settings/main"}
 
-echo "Downloading VS Code setup from GitLab..."
+echo "Downloading VS Code setup from GitHub..."
+echo "GitHub URL: $GITHUB_URL"
+
+# Function to download file with better error handling
+download_file() {
+    local url="$1"
+    local output="$2"
+    local filename="$3"
+    
+    echo "Downloading $filename..."
+    if curl -f -s "$url" -o "$output"; then
+        echo "Successfully downloaded $filename"
+        return 0
+    else
+        echo "Failed to download $filename"
+        return 1
+    fi
+}
 
 # Create .vscode folder
 if [ ! -d ".vscode" ]; then
@@ -14,7 +31,7 @@ if [ ! -d ".vscode" ]; then
 fi
 
 # Download settings.json
-if curl -f -s "$GITLAB_URL/settings.json" -o ".vscode/settings.json"; then
+if download_file "$GITHUB_URL/settings.json" ".vscode/settings.json" "settings.json"; then
     echo "Downloaded settings.json"
 else
     echo "Failed to download settings.json, creating default..."
@@ -71,10 +88,11 @@ else
 	"emmet.triggerExpansionOnTab": true
 }
 EOF
+    echo "Created default settings.json"
 fi
 
 # Download extensions.json
-if curl -f -s "$GITLAB_URL/extensions.json" -o ".vscode/extensions.json"; then
+if download_file "$GITHUB_URL/extensions.json" ".vscode/extensions.json" "extensions.json"; then
     echo "Downloaded extensions.json"
 else
     echo "Failed to download extensions.json, creating default..."
@@ -93,10 +111,11 @@ else
 	]
 }
 EOF
+    echo "Created default extensions.json"
 fi
 
 # Download launch.json
-if curl -f -s "$GITLAB_URL/launch.json" -o ".vscode/launch.json"; then
+if download_file "$GITHUB_URL/launch.json" ".vscode/launch.json" "launch.json"; then
     echo "Downloaded launch.json"
 else
     echo "Failed to download launch.json, creating default..."
@@ -130,6 +149,7 @@ else
 	]
 }
 EOF
+    echo "Created default launch.json"
 fi
 
 # Add .vscode to .gitignore if it doesn't exist
@@ -155,5 +175,3 @@ echo "   - Import sorting"
 echo "   - Recommended extensions"
 echo "   - Debug configuration"
 echo ""
-echo "Usage: ./get-vscode-setup.sh [GitLabUrl]"
-echo "Example: ./get-vscode-setup.sh https://gitlab.com/username/vscode-scripts/-/raw/main"
