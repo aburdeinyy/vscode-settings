@@ -11,12 +11,6 @@
 	"typescript.suggest.autoImports": true,
 	"typescript.updateImportsOnFileMove.enabled": "always",
 	"typescript.preferences.includePackageJsonAutoImports": "auto",
-	"files.exclude": {
-		"**/node_modules": true,
-		"**/dist": true,
-		"**/.git": true,
-		"**/coverage": true
-	},
 	"search.exclude": {
 		"**/node_modules": true,
 		"**/dist": true,
